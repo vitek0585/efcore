@@ -19,32 +19,35 @@ namespace _03_ObjectMapping
             {
                 context.Database.Migrate();
 
-                SupportedProperty(context);
-
-                Console.WriteLine();
-
-                Player firstPlayer = context.Players.Find(1);
-                var phone = context.Entry(firstPlayer).Property<string>("LastName").CurrentValue;
-                Console.WriteLine($"Get property value {phone}");
-
-                context.Entry(firstPlayer).Property<string>("LastName").CurrentValue = "Ivanov";
-                context.SaveChanges();
-
-                foreach (var player in context.Players)
-                {
-                    Console.WriteLine($"{player.Name} {player.Address?.City} {player.Phone} { context.Entry(player).Property<string>("LastName").CurrentValue}");
-                }
+                ShowPrivateProperty(context);
+                ShowShadowProperty(context);
             }
         }
 
-        private static void SupportedProperty(UefaDbContext context)
+        private static void ShowShadowProperty(UefaDbContext context)
+        {
+            Player firstPlayer = context.Players.Find(1);
+            var lastName = context.Entry(firstPlayer).Property<string>("LastName").CurrentValue;
+            Console.WriteLine($"Get property value {lastName}");
+
+            context.Entry(firstPlayer).Property<string>("LastName").CurrentValue = "Ivanov";
+            context.SaveChanges();
+
+            foreach (var player in context.Players)
+            {
+                Console.WriteLine(
+                    $"{player.Name} {player.Phone} {context.Entry(player).Property<string>("LastName").CurrentValue}");
+            }
+        }
+
+        private static void ShowPrivateProperty(UefaDbContext context)
         {
             var firstPlayer = context.Players.Find(1);
             firstPlayer.Phone = "093-344-44-19";
             context.SaveChanges();
             foreach (var player in context.Players)
             {
-                Console.WriteLine($"{player.Name} {player.Address?.City} {player.Phone}");
+                Console.WriteLine($"{player.Name} {player.Phone}");
             }
         }
     }

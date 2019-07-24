@@ -10,6 +10,4 @@
     <ProjectReference Include="..\00_Core\00_Core.csproj" />
   </ItemGroup>
 
-  <Import Project="..\00_Domain\00_Domain.projitems" Label="Shared" />
-
 </Project>

@@ -10,38 +10,38 @@ namespace _06_LoadNavProperties
     {
         static void Main(string[] args)
         {
-            //using (var context = new FifaDbContext())
-            //{
-            //    context.Database.Migrate();
-            //    foreach (var team in context.Teams.Include(t => t.Country))
-            //    {
-            //        Console.WriteLine($"{team.Name} {team.Country?.Name}");
-            //    }
-            //}
+            using (var context = new UefaDbContext())
+            {
+                context.Database.Migrate();
+                foreach (var team in context.Teams.Include(t => t.Country))
+                {
+                    Console.WriteLine($"{team.Name} {team.Country?.Name}");
+                }
+            }
 
             using (var context = new UefaDbContext())
             {
                 foreach (var team in context.Teams)
                 {
-                    //context.Entry(team)
-                    //    .Reference<Country>(t => t.Country)
-                    //    .Load();
+                    context.Entry(team)
+                        .Reference<Country>(t => t.Country)
+                        .Load();
 
                     context.Entry(team)
                         .Reference<Country>(t => t.Country)
                         .Query()
                         .Where(c => c.Name.Equals("Ukraine"));
 
-                    //context.Entry(team)
-                    //    .Collection<Player>(t => t.Players)
-                    //    .Query()
-                    //    .Where(c => c.Name.Equals("Ukraine"));
+                    context.Entry(team)
+                        .Collection<Player>(t => t.Players)
+                        .Query()
+                        .Where(p => p.Name.Equals("Rakitskiy"));
 
                     Console.WriteLine($"{team.Name} {team.Country?.Name}");
                 }
             }
 
-            //using (var context = new FifaDbContext())
+            //using (var context = new UefaDbContext())
             //{
             //    foreach (var team in context.Teams.Select(t => new { t.Name, t.Country }))
             //    {
@@ -49,7 +49,7 @@ namespace _06_LoadNavProperties
             //    }
             //}
 
-            //using (var context = new FifaDbContext())
+            //using (var context = new UefaDbContext())
             //{
             //    context.ChangeTracker.LazyLoadingEnabled = true;
             //    foreach (var team in context.Teams)
@@ -58,7 +58,7 @@ namespace _06_LoadNavProperties
             //    }
             //}
 
-            //using (var context = new FifaDbContext())
+            //using (var context = new UefaDbContext())
             //{
             //    foreach (var team in context.Teams)
             //    {

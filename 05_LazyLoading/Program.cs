@@ -9,363 +9,119 @@ namespace _05_LazyLoading
 {
     class Program
     {
-        // since 2.1
-        // Install-Package Microsoft.EntityFrameworkCore.Proxies -Version 2.2.6
-        // optionsBuilder.UseLazyLoadingProxies()
-        // all navigaion properties must be virtual 
         static void Main(string[] args)
         {
             using (var context = new UefaDbContext())
             {
-                context.Database.Migrate();
+                //context.Database.EnsureDeleted();
+                //context.Database.EnsureCreated();
 
-                Console.Clear();
+                //Console.Clear();
                 //Insert(context);
                 //Update(context);
-                UpdateIssue(context);
             }
+
+            UpdateThenError();
         }
 
         private static void Insert(UefaDbContext context)
         {
-            context.Countries.AddRange(new Country()
+            var countries = new List<Country>();
+            for (int i = 0; i < 2; i++)
             {
-                Name = "France",
-            }, new Country()
-            {
-                Name = "Italy",
-            });
+                countries.Add(new Country
+                {
+                    Name = $"France {i}"
+                });
+            }
+
+            context.Countries.AddRange(countries);
             context.SaveChanges();
 
-            context.AddRange(new List<Player>()
+            countries = new List<Country>();
+            for (int i = 0; i < 10; i++)
             {
-                new Player()
+                countries.Add(new Country
                 {
-                    Name = "RaHitich",
-                    Address = new Address()
-                },
-                new Player()
-                {
-                    Name = "Milevskiy",
-                    Address = new Address()
-                    {
-                        City = "Kiev"
-                    }
-                },new Player()
-                {
-                    Name = "RaHitich",
-                    Address = new Address()
-                },
-                new Player()
-                {
-                    Name = "Milevskiy",
-                    Address = new Address()
-                    {
-                        City = "Kiev"
-                    }
-                },new Player()
-                {
-                    Name = "RaHitich",
-                    Address = new Address()
-                },
-                new Player()
-                {
-                    Name = "Milevskiy",
-                    Address = new Address()
-                    {
-                        City = "Kiev"
-                    }
-                },new Player()
-                {
-                    Name = "RaHitich",
-                    Address = new Address()
-                },
-                new Player()
-                {
-                    Name = "Milevskiy",
-                    Address = new Address()
-                    {
-                        City = "Kiev"
-                    }
-                },new Player()
-                {
-                    Name = "RaHitich",
-                    Address = new Address()
-                },
-                new Player()
-                {
-                    Name = "Milevskiy",
-                    Address = new Address()
-                    {
-                        City = "Kiev"
-                    }
-                },new Player()
-                {
-                    Name = "RaHitich",
-                    Address = new Address()
-                },
-                new Player()
-                {
-                    Name = "Milevskiy",
-                    Address = new Address()
-                    {
-                        City = "Kiev"
-                    }
-                },new Player()
-                {
-                    Name = "RaHitich",
-                    Address = new Address()
-                },
-                new Player()
-                {
-                    Name = "Milevskiy",
-                    Address = new Address()
-                    {
-                        City = "Kiev"
-                    }
-                },new Player()
-                {
-                    Name = "RaHitich",
-                    Address = new Address()
-                },
-                new Player()
-                {
-                    Name = "Milevskiy",
-                    Address = new Address()
-                    {
-                        City = "Kiev"
-                    }
-                },new Player()
-                {
-                    Name = "RaHitich",
-                    Address = new Address()
-                },
-                new Player()
-                {
-                    Name = "Milevskiy",
-                    Address = new Address()
-                    {
-                        City = "Kiev"
-                    }
-                },new Player()
-                {
-                    Name = "RaHitich",
-                    Address = new Address()
-                },
-                new Player()
-                {
-                    Name = "Milevskiy",
-                    Address = new Address()
-                    {
-                        City = "Kiev"
-                    }
-                },new Player()
-                {
-                    Name = "RaHitich",
-                    Address = new Address()
-                },
-                new Player()
-                {
-                    Name = "Milevskiy",
-                    Address = new Address()
-                    {
-                        City = "Kiev"
-                    }
-                },new Player()
-                {
-                    Name = "RaHitich",
-                    Address = new Address()
-                },
-                new Player()
-                {
-                    Name = "Milevskiy",
-                    Address = new Address()
-                    {
-                        City = "Kiev"
-                    }
-                },new Player()
-                {
-                    Name = "RaHitich",
-                    Address = new Address()
-                },
-                new Player()
-                {
-                    Name = "Milevskiy",
-                    Address = new Address()
-                    {
-                        City = "Kiev"
-                    }
-                },new Player()
-                {
-                    Name = "RaHitich",
-                    Address = new Address()
-                },
-                new Player()
-                {
-                    Name = "Milevskiy",
-                    Address = new Address()
-                    {
-                        City = "Kiev"
-                    }
-                },new Player()
-                {
-                    Name = "RaHitich",
-                    Address = new Address()
-                },
-                new Player()
-                {
-                    Name = "Milevskiy",
-                    Address = new Address()
-                    {
-                        City = "Kiev"
-                    }
-                },new Player()
-                {
-                    Name = "RaHitich",
-                    Address = new Address()
-                },
-                new Player()
-                {
-                    Name = "Milevskiy",
-                    Address = new Address()
-                    {
-                        City = "Kiev"
-                    }
-                },new Player()
-                {
-                    Name = "RaHitich",
-                    Address = new Address()
-                },
-                new Player()
-                {
-                    Name = "Milevskiy",
-                    Address = new Address()
-                    {
-                        City = "Kiev"
-                    }
-                },new Player()
-                {
-                    Name = "RaHitich",
-                    Address = new Address()
-                },
-                new Player()
-                {
-                    Name = "Milevskiy",
-                    Address = new Address()
-                    {
-                        City = "Kiev"
-                    }
-                },new Player()
-                {
-                    Name = "RaHitich",
-                    Address = new Address()
-                },
-                new Player()
-                {
-                    Name = "Milevskiy",
-                    Address = new Address()
-                    {
-                        City = "Kiev"
-                    }
-                },new Player()
-                {
-                    Name = "RaHitich",
-                    Address = new Address()
-                },
-                new Player()
-                {
-                    Name = "Milevskiy",
-                    Address = new Address()
-                    {
-                        City = "Kiev"
-                    }
-                },new Player()
-                {
-                    Name = "RaHitich",
-                    Address = new Address()
-                },
-                new Player()
-                {
-                    Name = "Milevskiy",
-                    Address = new Address()
-                    {
-                        City = "Kiev"
-                    }
-                },new Player()
-                {
-                    Name = "RaHitich",
-                    Address = new Address()
-                },
-                new Player()
-                {
-                    Name = "Milevskiy",
-                    Address = new Address()
-                    {
-                        City = "Kiev"
-                    }
-                },new Player()
-                {
-                    Name = "RaHitich",
-                    Address = new Address()
-                },
-                new Player()
-                {
-                    Name = "Milevskiy",
-                    Address = new Address()
-                    {
-                        City = "Kiev"
-                    }
-                },
-            });
+                    Name = $"France {i}"
+                });
+            }
+
+            context.Countries.AddRange(countries);
             context.SaveChanges();
         }
 
         private static void Update(UefaDbContext context)
         {
-            var team = context.Teams.TagWith("Update Range").Single(t => t.Id.Equals(2));
-            var players = new List<Player>();
-            foreach (var player in context.Players)
+            foreach (var country in context.Countries.TagWith("Update Countries"))
             {
-                player.Team = team;
-                players.Add(player);
+                country.Name = country.Name + " (Updated)";
             }
 
-            //context.UpdateRange(players);
             context.SaveChanges();
         }
 
-        private static void UpdateIssue(UefaDbContext context)
+        private static void UpdateThenError()
         {
-            var team = context.Teams.Single(t => t.Id.Equals(2));
-            var teamToUpdate = new Team()
+            SeedData();
+
+            using (var context = new UefaDbContext())
             {
-                Country = new Country() {Id = 1},
-                Id = 2,
-                Name = "Shahtar 3"
-            };
+                var team = context.Teams.Find(1);
 
-            //context.Entry(team).State = EntityState.Detached;
+                var teamToUpdate = new Team()
+                {
+                    Id = 1,
+                    Country = new Country { Id = 1 },
+                    Name = "Shahtar (Updated)"
+                };
 
-            // track properties related to teamToUpdate only
-            //context.Entry(teamToUpdate).State = EntityState.Modified;
-            //teamToUpdate.Name = "Shahtar 77";
-            //var country2 = new Country() { Id = 2 };
-            //context.Attach(country2);
-            //teamToUpdate.Country = country2;
+                context.Entry(team).State = EntityState.Detached;
 
-            // track all properties include countries
-            //context.Attach(teamToUpdate);
-            //teamToUpdate.Name = "Shahtar 77";
+                // track properties related to teamToUpdate only
+                context.Entry(teamToUpdate).State = EntityState.Modified;
+                teamToUpdate.Name = "Shahtar 77";
+                //var country2 = new Country() { Id = 2 };
+                //context.Attach(country2);
+                //teamToUpdate.Country = country2;
 
-            //var country2 = new Country() { Id = 2 };
-            //context.Attach(country2);
-            //teamToUpdate.Country = country2;
+                // track all properties include countries
+                //context.Attach(teamToUpdate);
+                //teamToUpdate.Name = "Shahtar 77";
 
-            // update all properties include country
-            //context.Teams.Update(teamToUpdate);
-            //context.Entry(teamToUpdate).State = EntityState.Modified;
+                //var country2 = new Country() { Id = 2 };
+                //context.Attach(country2);
+                //teamToUpdate.Country = country2;
 
-            context.SaveChanges();
+                // update all properties include country
+                //context.Teams.Update(teamToUpdate);
+                
+                //context.Entry(teamToUpdate).State = EntityState.Modified;
+
+                context.SaveChanges();
+            }
+        }
+
+        private static void SeedData()
+        {
+            using (var context = new UefaDbContext())
+            {
+                context.Countries.AddRange(new Country()
+                {
+                    Name = "Ukraine"
+                }, new Country()
+                {
+                    Name = "Spain"
+                });
+
+                context.Teams.Add(new Team()
+                {
+                    Name = "Shahtar"
+                });
+
+                context.SaveChanges();
+                Console.Clear();
+            }
         }
     }
 }

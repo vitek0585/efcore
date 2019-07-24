@@ -10,17 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20190718062944_seed_player.cs" />
-    <Compile Remove="Migrations\20190718062944_seed_player.Designer.cs" />
-    <Compile Remove="Migrations\20190718064402_update_player.cs" />
-    <Compile Remove="Migrations\20190718064402_update_player.Designer.cs" />
-    <Compile Remove="Migrations\20190720125352_update_player_phone.cs" />
-    <Compile Remove="Migrations\20190720125352_update_player_phone.Designer.cs" />
-    <Compile Remove="Migrations\20190721132003_add_values_convertor.cs" />
-    <Compile Remove="Migrations\20190721132003_add_values_convertor.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="2.2.6" />
