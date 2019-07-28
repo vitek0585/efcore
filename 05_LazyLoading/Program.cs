@@ -9,19 +9,27 @@ namespace _05_LazyLoading
 {
     class Program
     {
+
         static void Main(string[] args)
         {
             using (var context = new UefaDbContext())
             {
                 //context.Database.EnsureDeleted();
                 //context.Database.EnsureCreated();
-
+              
                 //Console.Clear();
                 //Insert(context);
                 //Update(context);
             }
 
-            UpdateThenError();
+            //SeedDataUpdateExamples();
+            //Update_1();
+            //Update_1_1();
+            //Update_2();
+            //Update_3();
+            //Update_4();
+            //Update_5();
+            
         }
 
         private static void Insert(UefaDbContext context)
@@ -61,10 +69,8 @@ namespace _05_LazyLoading
             context.SaveChanges();
         }
 
-        private static void UpdateThenError()
+        private static void Update_1()
         {
-            SeedData();
-
             using (var context = new UefaDbContext())
             {
                 var team = context.Teams.Find(1);
@@ -72,37 +78,116 @@ namespace _05_LazyLoading
                 var teamToUpdate = new Team()
                 {
                     Id = 1,
-                    Country = new Country { Id = 1 },
+                    Country = context.Countries.Find(1),
+                    Name = "Shahtar (Updated)"
+                };
+
+                // update all properties include country
+                context.Teams.Update(teamToUpdate);
+                context.SaveChanges();
+            }
+        }
+
+        private static void Update_1_1()
+        {
+            using (var context = new UefaDbContext())
+            {
+                Console.WriteLine("Update");
+                var team = context.Teams.Find(1);
+
+                var teamToUpdate = new Team()
+                {
+                    Id = 1,
+                    Country = context.Countries.Find(1),
                     Name = "Shahtar (Updated)"
                 };
 
                 context.Entry(team).State = EntityState.Detached;
+                context.Teams.Update(teamToUpdate);
+                context.SaveChanges();
+            }
+        }
 
-                // track properties related to teamToUpdate only
+        private static void Update_2()
+        {
+            using (var context = new UefaDbContext())
+            {
+                Console.WriteLine("Update_2 EntityState.Modified");
+                var teamToUpdate = new Team()
+                {
+                    Id = 1,
+                    Country = context.Countries.Find(1),
+                    Name = "Shahtar (Updated_2)"
+                };
+
                 context.Entry(teamToUpdate).State = EntityState.Modified;
-                teamToUpdate.Name = "Shahtar 77";
-                //var country2 = new Country() { Id = 2 };
-                //context.Attach(country2);
-                //teamToUpdate.Country = country2;
+                context.SaveChanges();
+            }
+        }
 
-                // track all properties include countries
-                //context.Attach(teamToUpdate);
-                //teamToUpdate.Name = "Shahtar 77";
+        private static void Update_3()
+        {
+            using (var context = new UefaDbContext())
+            {
+                Console.WriteLine("Update_3 Explicit property modified");
+                var teamToUpdate = new Team()
+                {
+                    Id = 1,
+                    Country = context.Countries.Find(1),
+                    Name = "Shahtar (Updated_3)"
+                };
 
-                //var country2 = new Country() { Id = 2 };
-                //context.Attach(country2);
-                //teamToUpdate.Country = country2;
+                context.Attach(teamToUpdate);
+                context.Entry(teamToUpdate).Property(t => t.Name).IsModified = true;
+                context.SaveChanges();
+            }
+        }
 
-                // update all properties include country
-                //context.Teams.Update(teamToUpdate);
+        private static void Update_4()
+        {
+            using (var context = new UefaDbContext())
+            {
+                Console.WriteLine("Update_4 Update properties");
+                var teamToUpdate = new Team()
+                {
+                    Id = 1
+                };
+
+                context.Attach(teamToUpdate);
+                teamToUpdate.Name = "Shahtar (Updated_4)";
                 
-                //context.Entry(teamToUpdate).State = EntityState.Modified;
+                // Cannot insert explicit value for identity column in table 'Countries' when
+                // IDENTITY_INSERT is set to OFF.
+                var country2 = new Country() { Id = 2 };
+                teamToUpdate.Country = country2;
 
                 context.SaveChanges();
             }
         }
 
-        private static void SeedData()
+        private static void Update_5()
+        {
+            using (var context = new UefaDbContext())
+            {
+                Console.WriteLine("Update_5 Update properties");
+                var teamToUpdate = new Team()
+                {
+                    Id = 1
+                };
+
+                context.Attach(teamToUpdate);
+                teamToUpdate.Name = "Shahtar (Updated_5)";
+
+                var country2 = new Country() { Id = 2 };
+                context.Attach(country2);
+
+                teamToUpdate.Country = country2;
+
+                context.SaveChanges();
+            }
+        }
+
+        private static void SeedDataUpdateExamples()
         {
             using (var context = new UefaDbContext())
             {

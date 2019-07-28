@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using _00_Core.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -12,33 +14,40 @@ namespace _00_Core
     public class UefaDbContext : DbContext
     {
         public DbSet<Team> Teams { get; set; }
-
         public DbSet<Country> Countries { get; set; }
+
+        public DbSet<Player> Players { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
-               .UseSqlServer("Server=VIKTOR-PC\\SQLEXPRESS2016;Database=UEFA2020;Trusted_Connection=True;MultipleActiveResultSets=true",
-                   o =>
-                   {
-                       o.MinBatchSize(4);
-                       o.MaxBatchSize(10000);
-                   })
-                           .EnableSensitiveDataLogging()
-                           .UseLoggerFactory(CommandsLoggerFactory);
+               .UseSqlServer("Server=VIKTOR-PC\\SQLEXPRESS2016;Database=UEFA2020;Trusted_Connection=True;MultipleActiveResultSets=true")
+               .EnableSensitiveDataLogging()
+               .UseLoggerFactory(CommandsLoggerFactory);
 
-
-            // https://github.com/aspnet/EntityFrameworkCore/blob/master/src/EFCore.SqlServer/Update/Internal/SqlServerModificationCommandBatch.cs
-
-            // default value https://github.com/aspnet/EntityFrameworkCore/blob/master/src/EFCore.Relational/Update/Internal/CommandBatchPreparer.cs
+            //optionsBuilder.ConfigureWarnings(warning =>
+            //    warning.Throw(RelationalEventId.QueryClientEvaluationWarning));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Country>()
-                .HasMany(c => c.Teams)
-                .WithOne(t => t.Country);
+            modelBuilder.Entity<Team>()
+                .HasMany(c => c.Players);
 
+            modelBuilder.Entity<Team>()
+                .HasOne(t => t.Country)
+                .WithMany(c => c.Teams)
+                .HasForeignKey(t => t.CountryId);
+
+            modelBuilder.Entity<Country>()
+                .ToTable("Countries");
+
+            modelBuilder.Entity<Country>()
+                .Property(c => c.Name)
+                .ValueGeneratedOnAdd()
+                .IsRequired();
+
+            SeedData.Seed(modelBuilder);
         }
 
         public static readonly LoggerFactory CommandsLoggerFactory

@@ -17,6 +17,10 @@ namespace _00_Core
 
         public DbSet<Player> Players { get; set; }
 
+        public DbSet<FootballAward> FootballAwards { get; set; }
+
+        public DbSet<PlayerFootballAward> PlayerFootballAwards { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
@@ -24,6 +28,9 @@ namespace _00_Core
                .EnableSensitiveDataLogging()
                //             .UseLazyLoadingProxies()
                .UseLoggerFactory(CommandsLoggerFactory);
+
+            //optionsBuilder.ConfigureWarnings(warning =>
+            //    warning.Throw(RelationalEventId.QueryClientEvaluationWarning));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -40,7 +47,34 @@ namespace _00_Core
 
             var playerModelBuilder = modelBuilder.Entity<Player>();
 
-          
+            playerModelBuilder.Property(p => p.CardCode)
+                .HasConversion(new EncryptedConverter());
+
+            playerModelBuilder.Property(p => p.Position)
+                .HasConversion<string>()
+                .HasDefaultValue(Position.CF);
+
+            playerModelBuilder.OwnsOne(c => c.Address);
+
+            playerModelBuilder.Property(p => p.Phone)
+                .HasField("_phone")
+                .UsePropertyAccessMode(PropertyAccessMode.Field);
+
+            playerModelBuilder.Property<string>("LastName")
+                .HasColumnName("LastName");
+
+            modelBuilder.Entity<PlayerFootballAward>()
+                .HasKey(pfa => new {pfa.PlayerId, pfa.FootballAwardId});
+
+            modelBuilder.Entity<PlayerFootballAward>()
+                .HasOne(pfa => pfa.Player)
+                .WithMany(p => p.PlayerFootballAwards);
+
+            modelBuilder.Entity<PlayerFootballAward>()
+                .HasOne(pfa => pfa.FootballAward)
+                .WithMany(p => p.PlayerFootballAwards);
+
+            SeedData.Seed(modelBuilder);
         }
 
         public static readonly LoggerFactory CommandsLoggerFactory

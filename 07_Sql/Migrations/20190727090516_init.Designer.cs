@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using _00_Core;
 
-namespace _00_Core.Migrations
+namespace _07_Sql.Migrations
 {
     [DbContext(typeof(UefaDbContext))]
-    [Migration("20190718065719_update_player")]
-    partial class update_player
+    [Migration("20190727090516_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -27,7 +27,10 @@ namespace _00_Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("isEurope");
 
                     b.HasKey("Id");
 
@@ -37,17 +40,20 @@ namespace _00_Core.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "Ukraine"
+                            Name = "Ukraine",
+                            isEurope = true
                         },
                         new
                         {
                             Id = 2,
-                            Name = "Spain"
+                            Name = "Spain",
+                            isEurope = true
                         },
                         new
                         {
                             Id = 3,
-                            Name = "England"
+                            Name = "USA",
+                            isEurope = false
                         });
                 });
 
@@ -59,11 +65,27 @@ namespace _00_Core.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<string>("Phone");
+                    b.Property<int?>("TeamId");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("TeamId");
+
                     b.ToTable("Players");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Rakitskiy",
+                            TeamId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Milevskiy",
+                            TeamId = 1
+                        });
                 });
 
             modelBuilder.Entity("_00_Core.Models.Team", b =>
@@ -72,7 +94,7 @@ namespace _00_Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CountryId");
+                    b.Property<int>("CountryId");
 
                     b.Property<string>("Name");
 
@@ -99,30 +121,17 @@ namespace _00_Core.Migrations
 
             modelBuilder.Entity("_00_Core.Models.Player", b =>
                 {
-                    b.OwnsOne("_00_Core.Models.Address", "Address", b1 =>
-                        {
-                            b1.Property<int>("PlayerId")
-                                .ValueGeneratedOnAdd()
-                                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                            b1.Property<string>("City");
-
-                            b1.HasKey("PlayerId");
-
-                            b1.ToTable("Players");
-
-                            b1.HasOne("_00_Core.Models.Player")
-                                .WithOne("Address")
-                                .HasForeignKey("_00_Core.Models.Address", "PlayerId")
-                                .OnDelete(DeleteBehavior.Cascade);
-                        });
+                    b.HasOne("_00_Core.Models.Team", "Team")
+                        .WithMany("Players")
+                        .HasForeignKey("TeamId");
                 });
 
             modelBuilder.Entity("_00_Core.Models.Team", b =>
                 {
                     b.HasOne("_00_Core.Models.Country", "Country")
                         .WithMany("Teams")
-                        .HasForeignKey("CountryId");
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using _00_Core;
+using _00_Core.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace _01_SeedData
@@ -10,6 +12,7 @@ namespace _01_SeedData
         {
             using (var context = new UefaDbContext())
             {
+                context.Database.EnsureDeleted();
                 context.Database.Migrate();
                 foreach (var team in context.Teams)
                 {

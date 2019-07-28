@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using _00_Core;
+using _00_Core.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace _07_Sql
@@ -22,10 +23,48 @@ namespace _07_Sql
         //The SQL query cannot include JOIN queries to get related data.Use Include method to load related entities after FromSql() method.
         static void Main(string[] args)
         {
+            using (var context = new UefaDbContext())
+            {
+                //context.Database.EnsureDeleted();
+                context.Database.Migrate();
+                Console.Clear();
+            }
+
             //SelectByName();
             //SelectByNameInjetion();
             //SelectByNameAndOrder();
-            SelectByNameLinq();
+            //SelectByNameLinq();
+            //GetTeamsUseDbFunc();
+            GroupBy();
+        }
+
+        private static void GroupBy()
+        {
+            using (var context = new UefaDbContext())
+            {
+                //for (int i = 0; i < 1000; i++)
+                //{
+                //    context.Teams.Add(new Team() { CountryId = 1, Name = "Dynamo" });
+                //}
+                //    context.SaveChanges();
+
+                // foreach (var teams in context.Teams.Where(t => EF.Functions.Like(t.Name, "D%")).GroupBy(t =>t.Name).ToList())
+                // foreach (var teams in context.Teams.GroupBy(t =>t.Name).Select(t=>new {t.Key, Count = t.Count()}).ToList())
+                // https://github.com/aspnet/EntityFrameworkCore/issues/12560
+                foreach (var teams in context.Teams
+                    .GroupBy(t =>new {t.Name, t.Country.Id})
+                    .Select(t => new { t.Key.Name, t.Key.Id })
+                    .ToList()
+                    .Select(t=>new {
+                        t.Name,
+                        Country = context.Countries.Where(c=>c.Id == t.Id).FirstOrDefault()
+
+                    }).ToList())
+                {
+                    //Console.WriteLine($"{teams.Key} {teams.Count()}");
+                    Console.WriteLine($"{teams.Name} {teams.Country.Name}");
+                }
+            }
         }
 
         private static void SelectByName()
@@ -77,6 +116,17 @@ namespace _07_Sql
                     .ToList();
 
                 foreach (var player in players) { Console.WriteLine($"{player.Id} {player.Name} {player.Team?.Name}"); }
+            }
+        }
+        private static void GetTeamsUseDbFunc()
+        {
+            using (var context = new UefaDbContext())
+            {
+
+                var teams = context.Teams.FromSql("select * from GetTeams()")
+                    .Include(t => t.Players)
+                    .OrderBy(t => t.CountryId);
+                foreach (var team in teams) { Console.WriteLine($"{team.Name} {team.Players?.Count}"); }
             }
         }
     }

@@ -18,7 +18,7 @@ namespace _00_Core
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
-               .UseSqlServer("Server=CREDOLAB-VIPO\\SQLEXPRESS;Database=UEFA2020;Trusted_Connection=True;MultipleActiveResultSets=true")
+               .UseSqlServer("Server=VIKTOR-PC\\SQLEXPRESS2016;Database=UEFA2020;Trusted_Connection=True;MultipleActiveResultSets=true")
                .EnableSensitiveDataLogging()
                .UseLoggerFactory(CommandsLoggerFactory);
         }
@@ -27,7 +27,8 @@ namespace _00_Core
         {
             modelBuilder.Entity<Country>()
                 .HasMany(c => c.Teams)
-                .WithOne(t => t.Country);
+                .WithOne(t => t.Country)
+                .OnDelete(DeleteBehavior.Cascade);
 
             SeedData.Seed(modelBuilder);
         }

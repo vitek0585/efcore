@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using _00_Core;
 
-namespace _00_Core.Migrations
+namespace _01_SeedData.Migrations
 {
     [DbContext(typeof(UefaDbContext))]
-    [Migration("20190714150645_seed_data")]
-    partial class seed_data
+    [Migration("20190728064242_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -38,16 +38,6 @@ namespace _00_Core.Migrations
                         {
                             Id = 1,
                             Name = "Ukraine"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Spain"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "England"
                         });
                 });
 
@@ -86,7 +76,8 @@ namespace _00_Core.Migrations
                 {
                     b.HasOne("_00_Core.Models.Country", "Country")
                         .WithMany("Teams")
-                        .HasForeignKey("CountryId");
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

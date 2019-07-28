@@ -3,17 +3,15 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using _00_Core;
 
-namespace _00_Core.Migrations
+namespace _01_SeedData.Migrations
 {
     [DbContext(typeof(UefaDbContext))]
-    [Migration("20190717063138_player_table")]
-    partial class player_table
+    partial class UefaDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,30 +36,7 @@ namespace _00_Core.Migrations
                         {
                             Id = 1,
                             Name = "Ukraine"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Spain"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "England"
                         });
-                });
-
-            modelBuilder.Entity("_00_Core.Models.Player", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Players");
                 });
 
             modelBuilder.Entity("_00_Core.Models.Team", b =>
@@ -95,32 +70,12 @@ namespace _00_Core.Migrations
                         });
                 });
 
-            modelBuilder.Entity("_00_Core.Models.Player", b =>
-                {
-                    b.OwnsOne("_00_Core.Models.Address", "Address", b1 =>
-                        {
-                            b1.Property<int>("PlayerId")
-                                .ValueGeneratedOnAdd()
-                                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                            b1.Property<string>("City");
-
-                            b1.HasKey("PlayerId");
-
-                            b1.ToTable("Players");
-
-                            b1.HasOne("_00_Core.Models.Player")
-                                .WithOne("Address")
-                                .HasForeignKey("_00_Core.Models.Address", "PlayerId")
-                                .OnDelete(DeleteBehavior.Cascade);
-                        });
-                });
-
             modelBuilder.Entity("_00_Core.Models.Team", b =>
                 {
                     b.HasOne("_00_Core.Models.Country", "Country")
                         .WithMany("Teams")
-                        .HasForeignKey("CountryId");
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

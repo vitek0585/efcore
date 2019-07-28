@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace _00_Core.Migrations
+namespace _01_SeedData.Migrations
 {
     public partial class init : Migration
     {
@@ -37,8 +37,23 @@ namespace _00_Core.Migrations
                         column: x => x.CountryId,
                         principalTable: "Countries",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "Countries",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 1, "Ukraine" });
+
+            migrationBuilder.InsertData(
+                table: "Teams",
+                columns: new[] { "Id", "CountryId", "Name" },
+                values: new object[] { 1, 1, "Dynamo" });
+
+            migrationBuilder.InsertData(
+                table: "Teams",
+                columns: new[] { "Id", "CountryId", "Name" },
+                values: new object[] { 2, 1, "Shahtar" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Teams_CountryId",

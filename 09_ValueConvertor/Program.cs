@@ -10,31 +10,22 @@ namespace _09_ValueConvertor
     {
         static void Main(string[] args)
         {
-            //UpdatePlayers();
-
             using (var context = new UefaDbContext())
             {
-                foreach (var player in context.Players.Where(p => p.CardCode == "1234-5678"))
-                {
-                    Console.WriteLine($"{player.Name} {player.Position} {player.CardCode}");
-                }
-            };
-        }
+                context.Database.EnsureDeleted();
+                context.Database.EnsureCreated();
 
-        private static void UpdatePlayers()
-        {
-            using (var context = new UefaDbContext())
-            {
-                context.Database.Migrate();
 
                 foreach (var player in context.Players)
                 {
-                    player.CardCode = "1234-5678";
-                    player.Position = Position.CF;
+                    Console.WriteLine($"{player.Name} {player.Position} {player.CardCode}");
                 }
 
-                context.SaveChanges();
-            }
+                //foreach (var player in context.Players.Where(p => p.CardCode == "ewq-1234-5678"))
+                //{
+                //    Console.WriteLine($"{player.Name} {player.Position} {player.CardCode}");
+                //}
+            };
         }
     }
 }

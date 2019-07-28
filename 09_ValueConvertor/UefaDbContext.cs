@@ -15,22 +15,14 @@ namespace _00_Core
 
         public DbSet<Country> Countries { get; set; }
 
+        public DbSet<Player> Players { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
-               .UseSqlServer("Server=VIKTOR-PC\\SQLEXPRESS2016;Database=UEFA2020;Trusted_Connection=True;MultipleActiveResultSets=true",
-                   o =>
-                   {
-                       o.MinBatchSize(4);
-                       o.MaxBatchSize(10000);
-                   })
-                           .EnableSensitiveDataLogging()
-                           .UseLoggerFactory(CommandsLoggerFactory);
-
-
-            // https://github.com/aspnet/EntityFrameworkCore/blob/master/src/EFCore.SqlServer/Update/Internal/SqlServerModificationCommandBatch.cs
-
-            // default value https://github.com/aspnet/EntityFrameworkCore/blob/master/src/EFCore.Relational/Update/Internal/CommandBatchPreparer.cs
+               .UseSqlServer("Server=VIKTOR-PC\\SQLEXPRESS2016;Database=UEFA2020;Trusted_Connection=True;MultipleActiveResultSets=true")
+               .EnableSensitiveDataLogging()
+               .UseLoggerFactory(CommandsLoggerFactory);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -39,6 +31,26 @@ namespace _00_Core
                 .HasMany(c => c.Teams)
                 .WithOne(t => t.Country);
 
+            modelBuilder.Entity<Country>()
+                .HasQueryFilter(c => c.isEurope);
+
+            modelBuilder.Entity<Team>()
+                .HasMany(c => c.Players);
+
+            var playerModelBuilder = modelBuilder.Entity<Player>();
+
+            playerModelBuilder.Property(p => p.CardCode)
+                .HasConversion(new EncryptedConverter());
+
+            //playerModelBuilder.Property(p => p.Position)
+            //    .HasConversion(new EnumToStringConverter<Position>())
+            //    .HasDefaultValue(Position.CF);
+
+            playerModelBuilder.Property(p => p.Position)
+                .HasConversion<string>()
+                .HasDefaultValue(Position.CF);
+
+            SeedData.Seed(modelBuilder);
         }
 
         public static readonly LoggerFactory CommandsLoggerFactory

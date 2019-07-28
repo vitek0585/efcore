@@ -3,13 +3,8 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <RootNamespace>_01_SeedData</RootNamespace>
+    <RootNamespace>_04_GroupBy</RootNamespace>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="Migrations\20190728063451_update_seed.cs" />
-    <Compile Remove="Migrations\20190728063451_update_seed.Designer.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\00_Core\00_Core.csproj" />

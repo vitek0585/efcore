@@ -22,6 +22,7 @@ namespace _02_OwnsType
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             var playerModelBuilder = modelBuilder.Entity<Player>();
+            // https://github.com/aspnet/EntityFrameworkCore/issues/16775
             playerModelBuilder.OwnsOne(c => c.Address);
         }
 
