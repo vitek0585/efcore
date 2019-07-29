@@ -34,7 +34,7 @@ namespace _01_SeedData.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
+                            Id = 2,
                             Name = "Ukraine"
                         });
                 });

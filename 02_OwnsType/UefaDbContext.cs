@@ -1,6 +1,4 @@
-﻿using _00_Core.Models;
-using _02_OwnsType.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
 using Player = _02_OwnsType.Models.Player;

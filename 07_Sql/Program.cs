@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using _00_Core;
-using _00_Core.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace _07_Sql
@@ -26,16 +25,16 @@ namespace _07_Sql
             using (var context = new UefaDbContext())
             {
                 //context.Database.EnsureDeleted();
-                context.Database.Migrate();
+                //context.Database.Migrate();
                 Console.Clear();
             }
 
             //SelectByName();
             //SelectByNameInjetion();
             //SelectByNameAndOrder();
-            //SelectByNameLinq();
+            SelectByNameLinq();
             //GetTeamsUseDbFunc();
-            GroupBy();
+            //GroupBy();
         }
 
         private static void GroupBy()
@@ -109,8 +108,8 @@ namespace _07_Sql
             {
                 var s = @"%l%";
                 var players = context.Players
-                    .Where(p => EF.Functions.Like(p.Name, s))
-                    //.Where(p => p.Name.Contains(s))
+                   // .Where(p => EF.Functions.Like(p.Name, s))
+                    .Where(p => p.Name.Contains(s))
                     .OrderByDescending(p => p.Id)
                     .Include(p => p.Team)
                     .ToList();
@@ -122,7 +121,7 @@ namespace _07_Sql
         {
             using (var context = new UefaDbContext())
             {
-
+            
                 var teams = context.Teams.FromSql("select * from GetTeams()")
                     .Include(t => t.Players)
                     .OrderBy(t => t.CountryId);

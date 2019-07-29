@@ -1,11 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
-using System;
 using _00_Core.Models;
-using Microsoft.Extensions.Options;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace _00_Core
 {
@@ -18,7 +14,7 @@ namespace _00_Core
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
-               .UseSqlServer("Server=VIKTOR-PC\\SQLEXPRESS2016;Database=UEFA2020;Trusted_Connection=True;MultipleActiveResultSets=true",
+               .UseSqlServer("Server=CREDOLAB-VIPO\\SQLEXPRESS;Database=UEFA2020;Trusted_Connection=True;MultipleActiveResultSets=true",
                    o =>
                    {
                        o.MinBatchSize(4);

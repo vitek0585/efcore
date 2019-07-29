@@ -1,7 +1,5 @@
 ﻿using System;
-using _00_Core;
 using _00_Core.Models;
-using Microsoft.EntityFrameworkCore;
 using Player = _02_OwnsType.Models.Player;
 
 namespace _02_OwnsType
@@ -12,11 +10,11 @@ namespace _02_OwnsType
         {
             using (var context = new UefaDbContext())
             {
-                //context.Database.EnsureDeleted();
-                //context.Database.EnsureCreated();
+                context.Database.EnsureDeleted();
+                context.Database.EnsureCreated();
 
-                //AddPlayers(context);
-                AddPlayersThenError(context);
+                AddPlayers(context);
+                //AddPlayersThenError(context);
 
                 foreach (var player in context.Players)
                 {

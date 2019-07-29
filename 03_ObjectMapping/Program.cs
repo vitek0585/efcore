@@ -1,5 +1,6 @@
 ﻿using _00_Core;
 using System;
+using System.Linq;
 using _00_Core.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,8 +18,10 @@ namespace _03_ObjectMapping
         {
             using (var context = new UefaDbContext())
             {
+                context.Database.EnsureDeleted();
                 context.Database.Migrate();
-
+                context.Players.Add(new Player() { Name = "Vitek" });
+                context.SaveChanges();
                 ShowPrivateProperty(context);
                 ShowShadowProperty(context);
             }
@@ -26,6 +29,7 @@ namespace _03_ObjectMapping
 
         private static void ShowShadowProperty(UefaDbContext context)
         {
+            
             Player firstPlayer = context.Players.Find(1);
             var lastName = context.Entry(firstPlayer).Property<string>("LastName").CurrentValue;
             Console.WriteLine($"Get property value {lastName}");
@@ -33,7 +37,7 @@ namespace _03_ObjectMapping
             context.Entry(firstPlayer).Property<string>("LastName").CurrentValue = "Ivanov";
             context.SaveChanges();
 
-            foreach (var player in context.Players)
+            foreach (var player in context.Players.Where(p=> context.Entry(p).Property<string>("LastName").CurrentValue == "Ivanov"))
             {
                 Console.WriteLine(
                     $"{player.Name} {player.Phone} {context.Entry(player).Property<string>("LastName").CurrentValue}");

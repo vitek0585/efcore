@@ -28,6 +28,8 @@ namespace _04_CompiledQueries
         {
             using (var context = new UefaDbContext())
             {
+                context.Database.EnsureDeleted();
+                context.Database.EnsureCreated();
                 var cq = EF.CompileQuery((UefaDbContext ctx) => ctx.Players.Where(p => StartsWith(p)));
                 var players = cq(context);
                 foreach (var player in players)

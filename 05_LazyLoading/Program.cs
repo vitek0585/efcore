@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using _00_Core;
 using _00_Core.Models;
 using Microsoft.EntityFrameworkCore;
@@ -16,15 +15,15 @@ namespace _05_LazyLoading
             {
                 //context.Database.EnsureDeleted();
                 //context.Database.EnsureCreated();
-              
+
                 //Console.Clear();
                 //Insert(context);
                 //Update(context);
             }
 
-            //SeedDataUpdateExamples();
+            SeedDataUpdateExamples();
             //Update_1();
-            //Update_1_1();
+            Update_1_1();
             //Update_2();
             //Update_3();
             //Update_4();

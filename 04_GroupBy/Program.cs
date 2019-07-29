@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using _00_Core;
-using _00_Core.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace _07_Sql

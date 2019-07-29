@@ -1,7 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace _00_Core.Models
 {
